@@ -1,28 +1,34 @@
-const express = require('express');
-const morgan = require('morgan');
-const handlebars = require('express-handlebars');
-const path = require('path');
+const express = require("express");
+const morgan = require("morgan");
+const handlebars = require("express-handlebars");
+const path = require("path");
 const app = express();
-const port = 3000
+const port = 3000;
+const route = require("./routes");
 
+app.use(express.static(path.join(__dirname, "public")));
+app.use(
+    express.urlencoded({
+        extended: true,
+    }),
+);
+app.use(express.json());
 
-app.use(express.static(path.join(__dirname, 'public')));
+// XAMLHttpRequest, fetch, axios, ajax
+
 // HTTP logger
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
 
 // tempplate engine
-app.engine('hbs', handlebars.create({extname: '.hbs'}).engine);
-app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'resources/views'));
+app.engine("hbs", handlebars.create({ extname: ".hbs" }).engine);
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, "resources/views"));
 
+// Home, search, contact
 
-app.get('/', (req, res) => {
-  res.render('home');
-})
-app.get('/news', (req, res) => {
-  res.render('news');
-})
+// Routes Init
+route(app);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+    console.log(`Example app listening on port ${port}`);
+});
